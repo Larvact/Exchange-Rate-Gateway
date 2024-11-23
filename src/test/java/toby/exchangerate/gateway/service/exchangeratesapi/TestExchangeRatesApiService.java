@@ -1,12 +1,14 @@
 package toby.exchangerate.gateway.service.exchangeratesapi;
 
 import org.assertj.core.api.Condition;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.web.reactive.function.client.WebClient;
+import toby.exchangerate.common.exception.api.ApiResponseException;
 import toby.exchangerate.json.api.exchangerates.latest.LatestCurrencyExchangeRatesRequest;
 import toby.exchangerate.json.api.exchangerates.latest.LatestCurrencyExchangeRatesResponse;
 
@@ -15,11 +17,20 @@ import java.util.List;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWireMock()
 class TestExchangeRatesApiService
 {
+    private static final String RESOURCE_NOT_FOUND_ERROR_RESPONSE = """
+            {
+              "success": false,
+              "error": {
+                "code": 404,
+                "info": "The requested resource does not exist."
+              }
+            }""";
     private static final String USD_LATEST_CURRENCY_RESPONSE = """
             {
               "success": true,
@@ -41,6 +52,18 @@ class TestExchangeRatesApiService
     {
         final var webClient = WebClient.builder().baseUrl("http://localhost:" + wireMockPort).build();
         exchangeRatesApiService = new ExchangeRatesApiService(webClient);
+    }
+
+    @Test
+    void notFoundResponseMocked_getLatestCurrencyExchangeRate_notFoundExceptionRaised()
+    {
+        stubFor((get(urlEqualTo("/v1/latest?base=USD&symbols=GBP,JPY,EUR"))
+                .willReturn(aResponse()
+                        .withStatus(404)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(RESOURCE_NOT_FOUND_ERROR_RESPONSE))));
+
+        final var apiResponseException = assertThrows(ApiResponseException.class, () -> exchangeRatesApiService.getLatestCurrencyExchangeRate(new LatestCurrencyExchangeRatesRequest("USD", List.of("GBP", "JPY", "EUR"))));
     }
 
     @Test

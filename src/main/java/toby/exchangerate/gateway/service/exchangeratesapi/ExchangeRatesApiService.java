@@ -28,7 +28,7 @@ public class ExchangeRatesApiService implements ExchangeRatesService
        return webClient.get()
                .uri(String.format(LATEST_CURRENCY_EXCHANGE_RATE_BASE_PATH, latestCurrencyExchangeRatesRequest.getBaseCurrencySymbol(), String.join(",", latestCurrencyExchangeRatesRequest.getResponseCurrencySymbols())))
                .retrieve()
-               .onStatus(httpStatusCode -> httpStatusCode != HttpStatus.OK, response -> Mono.error(() -> new ApiResponseException(null, null, null, Instant.now())))
+               .onStatus(httpStatusCode -> httpStatusCode != HttpStatus.OK, response -> Mono.error(() -> new ApiResponseException(null, null, HttpStatus.valueOf(response.statusCode().value()), Instant.now())))
                .bodyToMono(LatestCurrencyExchangeRatesResponse.class)
                .block();
     }
