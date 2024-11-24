@@ -13,23 +13,22 @@
     <packaging>jar</packaging>
     <name>gateway-api-json</name>
 
+    <properties>
+        <commonVersion>1.0.0</commonVersion>
+    </properties>
+
     <dependencies>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
+            <groupId>toby.exchangerate</groupId>
+            <artifactId>common</artifactId>
+            <version>${commonVersion}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
+            <groupId>toby.exchangerate</groupId>
+            <artifactId>json</artifactId>
+            <version>${commonVersion}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
