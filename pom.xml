@@ -12,6 +12,7 @@
 
 	<modules>
 		<module>gateway-microservice</module>
+		<module>gateway-api-json</module>
 	</modules>
 
 </project>
