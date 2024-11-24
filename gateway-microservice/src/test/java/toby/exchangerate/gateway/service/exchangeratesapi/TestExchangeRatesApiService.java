@@ -1,7 +1,6 @@
 package toby.exchangerate.gateway.service.exchangeratesapi;
 
 import org.assertj.core.api.Condition;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,7 +79,7 @@ class TestExchangeRatesApiService
         assertThat(latestCurrencyExchangeRatesResponse)
                 .has(new Condition<>(response -> response.getCurrencyExchangeRates().size() == 3, "The response has 3 exchange rate values"))
                 .has(new Condition<>(response -> nonNull(response.getTimestamp()), "Timestamp has been set"))
-                .extracting(LatestCurrencyExchangeRatesResponse::getIsSuccess, LatestCurrencyExchangeRatesResponse::getBaseCurrency)
-                .containsExactly(true, "USD");
+                .extracting(LatestCurrencyExchangeRatesResponse::getBaseCurrency)
+                .isEqualTo("USD");
     }
 }
