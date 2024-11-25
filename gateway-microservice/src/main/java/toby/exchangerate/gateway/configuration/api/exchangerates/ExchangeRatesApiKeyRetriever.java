@@ -11,6 +11,6 @@ import toby.exchangerate.gateway.configuration.api.ApiKeyRetriever;
 @Getter
 public class ExchangeRatesApiKeyRetriever implements ApiKeyRetriever
 {
-    @Value("exchange.rates.api.key")
+    @Value("${exchange.rates.api.key}")
     private String apiKey;
 }
