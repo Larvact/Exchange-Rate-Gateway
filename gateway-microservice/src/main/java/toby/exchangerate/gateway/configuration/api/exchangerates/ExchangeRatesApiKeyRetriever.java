@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import toby.exchangerate.gateway.configuration.api.ApiKeyRetriever;
 
 @Component
-@Qualifier("ExchangeRatesApiKeyRetriever")
+@Qualifier("exchangeRatesApiKeyRetriever")
 @Getter
 public class ExchangeRatesApiKeyRetriever implements ApiKeyRetriever
 {
